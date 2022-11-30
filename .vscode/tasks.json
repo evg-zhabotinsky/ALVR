@@ -1,0 +1,53 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "prepare server build deps",
+            "type": "shell",
+            "command": "cargo xtask prepare-deps --platform windows",
+            "group": "build"
+        },
+        {
+            "label": "build server release",
+            "type": "shell",
+            "command": "cargo xtask build-server --release; if ($?) { cp .vscode\\misc\\session.json build\\alvr_server_windows\\ }",
+            "problemMatcher": ["$rustc"],
+            "group": "build"
+        },
+        {
+            "label": "run server",
+            "type": "shell",
+            "command": "cd build\\alvr_server_windows; &'.\\ALVR Launcher.exe'",
+            "group": "build"
+        },
+        {
+            "label": "build and run server release",
+            "dependsOrder": "sequence",
+            "dependsOn": [
+                "build server release",
+                "run server"
+            ],
+            "group": "build"
+        },
+        {
+            "label": "update saved server config",
+            "type": "shell",
+            "command": "cp build\\alvr_server_windows\\session.json .vscode\\misc\\",
+            "group": "build"
+        },
+        {
+            "label": "restore saved server config",
+            "type": "shell",
+            "command": "cp .vscode\\misc\\session.json build\\alvr_server_windows\\",
+            "group": "build"
+        },
+        {
+            "label": "wipe server config",
+            "type": "shell",
+            "command": "rm build\\alvr_server_windows\\session.json",
+            "group": "build"
+        },
+    ]
+}
