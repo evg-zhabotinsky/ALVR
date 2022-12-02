@@ -3,12 +3,13 @@
 #include "Paths.h"
 #include "Settings.h"
 #include "Utils.h"
+#include "Walkomotion.h"
 #include "include/openvr_math.h"
 #include <algorithm>
 #include <cstring>
 #include <string_view>
 
-OvrController::OvrController(uint64_t deviceID) : TrackedDevice(deviceID) {
+OvrController::OvrController(uint64_t deviceID, std::shared_ptr<Walkomotion> walkomotion) : TrackedDevice(deviceID), m_walkomotion(walkomotion) {
     double rightHandSignFlip = deviceID == LEFT_HAND_ID ? 1. : -1.;
 
     m_pose = vr::DriverPose_t{};
@@ -616,6 +617,14 @@ void OvrController::SetButton(uint64_t id, AlvrButtonValue value) {
         uint32_t flag;
         if (id == MENU_CLICK_ID) {
             flag = ALVR_BUTTON_FLAG(ALVR_INPUT_SYSTEM_CLICK);
+            if (value.binary) {
+                m_menu_press_ts = GetTimestampUs();
+            } else if (m_menu_press_ts) {
+                if (GetTimestampUs() > m_menu_press_ts + 2000000) {
+                    m_walkomotion->Recenter();
+                }
+                m_menu_press_ts = 0;
+            }
         } else if (id == A_CLICK_ID) {
             flag = ALVR_BUTTON_FLAG(ALVR_INPUT_A_CLICK);
         } else if (id == A_TOUCH_ID) {
@@ -667,6 +676,8 @@ bool OvrController::onPoseUpdate(float predictionS,
     if (this->object_id == vr::k_unTrackedDeviceIndexInvalid) {
         return false;
     }
+
+    m_walkomotion->TransformPose(&motion);
 
     auto pose = vr::DriverPose_t{};
 

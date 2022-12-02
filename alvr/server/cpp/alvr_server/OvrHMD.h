@@ -21,6 +21,8 @@ class CD3DRender;
 #endif
 class PoseHistory;
 
+class Walkomotion;
+
 class OvrHmd : public TrackedDevice,
                public vr::ITrackedDeviceServerDriver,
                vr::IVRDisplayComponent {
@@ -94,4 +96,6 @@ class OvrHmd : public TrackedDevice,
     std::shared_ptr<OvrViveTrackerProxy> m_viveTrackerProxy;
 
     vr::DriverPose_t m_pose = {};
+
+    std::shared_ptr<Walkomotion> m_walkomotion;
 };

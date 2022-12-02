@@ -4,10 +4,13 @@
 #include "TrackedDevice.h"
 #include "openvr_driver.h"
 #include <map>
+#include <memory>
+
+class Walkomotion;
 
 class OvrController : public TrackedDevice, public vr::ITrackedDeviceServerDriver {
   public:
-    OvrController(uint64_t deviceID);
+    OvrController(uint64_t deviceID, std::shared_ptr<Walkomotion>);
 
     virtual ~OvrController(){};
 
@@ -102,4 +105,7 @@ class OvrController : public TrackedDevice, public vr::ITrackedDeviceServerDrive
     float m_gripValue = 0;
     float m_joystickX = 0;
     float m_joystickY = 0;
+
+    uint64_t m_menu_press_ts = 0;
+    std::shared_ptr<Walkomotion> m_walkomotion;
 };
