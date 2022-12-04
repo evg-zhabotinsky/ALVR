@@ -618,12 +618,12 @@ void OvrController::SetButton(uint64_t id, AlvrButtonValue value) {
         if (id == MENU_CLICK_ID) {
             flag = ALVR_BUTTON_FLAG(ALVR_INPUT_SYSTEM_CLICK);
             if (value.binary) {
-                m_menu_press_ts = GetTimestampUs();
-            } else if (m_menu_press_ts) {
-                if (GetTimestampUs() > m_menu_press_ts + 2000000) {
+                m_menuPressTs = GetTimestampUs();
+            } else if (m_menuPressTs) {
+                if (GetTimestampUs() > m_menuPressTs + 2000000) {
                     m_walkomotion->Recenter();
                 }
-                m_menu_press_ts = 0;
+                m_menuPressTs = 0;
             }
         } else if (id == A_CLICK_ID) {
             flag = ALVR_BUTTON_FLAG(ALVR_INPUT_A_CLICK);
@@ -677,7 +677,7 @@ bool OvrController::onPoseUpdate(float predictionS,
         return false;
     }
 
-    m_walkomotion->TransformPose(&motion);
+    // m_walkomotion->TransformPose(&motion);
 
     auto pose = vr::DriverPose_t{};
 

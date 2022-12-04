@@ -11,8 +11,13 @@ class Walkomotion {
     void SetVirtPosition(double x, double z);
     void ResetState();
   private:
+    void PhysToVirt(double px, double pz, double *vx, double *vz);
     void UpdateReference();
-    double ref_x, ref_z, ref_r, ref_a, ref_vx, ref_vz, ref_dx, ref_dz;
-    bool ref_i;
-    double center_x, center_z, phys_x, phys_z;
+
+    double m_safeRadius, m_marginRadius, m_walkRadius, m_turnRadius, m_minRadius;
+    double m_dragLength;
+
+    double m_refX, m_refZ, m_refR, m_refA, m_refVX, m_refVZ, m_refDX, m_refDZ;
+    bool m_refI;
+    double m_centerX, m_centerZ, m_physX, m_physZ, m_virtX, m_virtZ;
 };

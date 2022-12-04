@@ -106,6 +106,6 @@ class OvrController : public TrackedDevice, public vr::ITrackedDeviceServerDrive
     float m_joystickX = 0;
     float m_joystickY = 0;
 
-    uint64_t m_menu_press_ts = 0;
+    uint64_t m_menuPressTs = 0;
     std::shared_ptr<Walkomotion> m_walkomotion;
 };
